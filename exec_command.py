@@ -13,6 +13,7 @@ class SSHconn(object):
         self.ssh_conn()
 
     def ssh_conn(self):
+        "SSH连接"
         try:
             conn = paramiko.SSHClient()
             conn.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -30,41 +31,46 @@ class SSHconn(object):
             print(f" Failed to connect {self._host}")
 
     def exec_cmd(self, command):
+        "命令执行"
         if self.SSHConnection:
             stdin, stdout, stderr = self.SSHConnection.exec_command(command)
             result = stdout.read()
             if result is not None:
-                return result
+                return {"st": True, "rt": result}
 
             err = stderr.read()
             if err is not None:
-                return err
+                return {"st": False, "rt": err}
+
 
     def download(self, local, remote):
+        "sftp下载文件"
         try:
             sftp_file = paramiko.SFTPClient.from_transport(self.transport)
             download_file = sftp_file.get(remotepath=remote, localpath=local)
-            return download_file
+            return {"st": True, "rt": "File downloaded successfully"}
         except Exception as e:
-            return False
+            return {"st": False, "rt": e}
 
     def upload(self, local, remote):
+        "sftp上传文件"
         try:
             sftp_file = paramiko.SFTPClient.from_transport(self.transport)
             upload_file = sftp_file.put(remotepath=remote, localpath=local)
-            return upload_file
+            return {"st": True, "rt": "File uploaded successfully"}
         except Exception as e:
-            return False
+            return {"st": False, "rt": e}
 
 
 class LocalProcess(object):
     def exec_cmd(command):
+        "命令执行"
         sub_conn = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         if sub_conn.returcode == 0:
             result = sub_conn.stdout
-            return result
+            return {"st": True, "rt": result}
         else:
             print(f"Can't to execute command: {command}")
             err = sub_conn.stderr
             print(f"Error message:{err}")
-            return False
+            return {"st": False, "rt": err}
