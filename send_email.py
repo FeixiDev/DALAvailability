@@ -5,8 +5,8 @@ from email.header import Header
 class STMPEmail(object):
 
     def __init__(self,receivers,
-                 message1 = '“Congratulations, the test passes”',
-                 message2 = '“Sorry, there was a error with the test and the test exited”'):
+                 message1 = 'Congratulations, the test passes',
+                 message2 = 'Sorry, there was a error with the test and the test exited'):
         self.mail_host = 'smtp.exmail.qq.com'
         self.mail_user = 'github.host@feixitek.com'
         self.mail_pass = 'Githubhost1234'
@@ -17,7 +17,9 @@ class STMPEmail(object):
 
 
     def connect_stmp(self):
-        "STMP连接"
+        """
+        STMP连接
+        """
         try:
             smtpObj = smtplib.SMTP()
             smtpObj.connect(self.mail_host, 25)
@@ -38,7 +40,9 @@ class STMPEmail(object):
 
 
     def send_succeed(self):
-        "测试成功，发送邮件"
+        """
+        测试成功，发送邮件
+        """
         smtpObj = self.connect_stmp()
         message = MIMEText(self.message1, 'plain', 'utf-8')
         message['From'] = Header("VersaTST", 'utf-8')
@@ -54,7 +58,9 @@ class STMPEmail(object):
 
 
     def send_fail(self):
-        "测试失败，发送邮件"
+        """
+        测试失败，发送邮件
+        """
         smtpObj = self.connect_stmp()
         message = MIMEText(self.message2, 'plain', 'utf-8')
         message['From'] = Header("VersaTST", 'utf-8')

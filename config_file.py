@@ -5,7 +5,9 @@ class ConfFile(object):
         self.file_path = file_path
 
     def read_yaml(self):
-        "读yaml文件"
+        """
+        读yaml文件
+        """
         try:
             with open(self.file_path, 'r', encoding='utf-8') as f:
                 yaml_file = yaml.load(f,Loader=yaml.FullLoader)
@@ -16,7 +18,9 @@ class ConfFile(object):
             print("Error in the type of file .")
 
     def update_yaml(self,yaml_dict):
-        "更新yaml文件"
+        """
+        更新yaml文件
+        """
         try:
             with open(self.file_path, 'w', encoding='utf-8') as f:
                 yaml.dump(yaml_dict, f, default_flow_style=False)

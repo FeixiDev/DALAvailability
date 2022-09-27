@@ -12,8 +12,11 @@ class SSHconn(object):
         self.SSHConnection = None
         self.ssh_conn()
 
+
     def ssh_conn(self):
-        "SSH连接"
+        """
+        SSH连接
+        """
         try:
             conn = paramiko.SSHClient()
             conn.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -31,7 +34,9 @@ class SSHconn(object):
             print(f" Failed to connect {self._host}")
 
     def exec_cmd(self, command):
-        "命令执行"
+        """
+        命令执行
+        """
         if self.SSHConnection:
             stdin, stdout, stderr = self.SSHConnection.exec_command(command)
             result = stdout.read()
@@ -44,7 +49,9 @@ class SSHconn(object):
 
 
     def download(self, local, remote):
-        "sftp下载文件"
+        """
+        sftp下载文件
+        """
         try:
             sftp_file = paramiko.SFTPClient.from_transport(self.transport)
             download_file = sftp_file.get(remotepath=remote, localpath=local)
@@ -53,7 +60,9 @@ class SSHconn(object):
             return {"st": False, "rt": e}
 
     def upload(self, local, remote):
-        "sftp上传文件"
+        """
+        sftp上传文件
+        """
         try:
             sftp_file = paramiko.SFTPClient.from_transport(self.transport)
             upload_file = sftp_file.put(remotepath=remote, localpath=local)
@@ -64,7 +73,9 @@ class SSHconn(object):
 
 class LocalProcess(object):
     def exec_cmd(command):
-        "命令执行"
+        """
+        命令执行
+        """
         sub_conn = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         if sub_conn.returcode == 0:
             result = sub_conn.stdout
