@@ -1,7 +1,4 @@
 class DRBD:
-    """
-    查看操作
-    """
     def drbdmon(self):
         cmd = f'drbdmon'
 
@@ -13,9 +10,6 @@ class DRBD:
 
 
 class Linstor:
-    """
-    创建操作
-    """
     # node创建
     def create_node(self, node_name, ip, node_type):
         cmd = f'linstor n create {node_name} {ip} --node-type {node_type}'
@@ -56,9 +50,6 @@ class Linstor:
     def create_resource_by_rg(self,vg_name,resource_name,resource_size):
         cmd = f'linstor rg spawn-resources {vg_name} {resource_name} {resource_size}'
 
-    """
-    容量/设置调整操作
-    """
     # 调整资源的的容量大小
     def adjust_resource_size(self, vd_number, resource_name, size):
         cmd = f'linstor vd set-size {resource_name} {vd_number} {size}'
@@ -71,9 +62,6 @@ class Linstor:
     def unset_linstor_resource_settings(self,setting_name,setting_operation,resource_name):
         cmd = f'linstor rd drbd-options --unset-{setting_name} {setting_operation} {resource_name}'
 
-    """
-    查看操作
-    """
     # 查看节点信息
     def check_node(self):
         cmd = f'linstor n l'
@@ -110,9 +98,6 @@ class Linstor:
     def check_error_reports_specific(self,report_number):
         cmd = f'linstor error-reports show {report_number}'
 
-    """
-    删除操作
-    """
     # 删除指定节点
     def delete_node(self,node_name):
         cmd = f'linstor n d {node_name}'
@@ -143,20 +128,16 @@ class Linstor:
 
 
 class LVM:
-    """
-    创建操作
-    """
     # pv创建
     def create_pv(self,path):
         cmd = f'pvcreate {path}'
 
-    # vg创建(1个pv组成)
-    def create_vg(self,pv_name,vg_name):
-        cmd = f'vgcreate {vg_name} {pv_name}'
-
-    # vg创建(2个pv组成)
-    def create_vg_more_pv(self,pv_name1,pv_name2,vg_name):
-        cmd = f'vgcreate {vg_name} {pv_name1} {pv_name2}'
+    # vg创建(传入多个vg名的数组)
+    def create_vg(self,pv_name_list,vg_name):
+        pv = ''
+        for i in pv_name_list:
+            pv += i + ''
+        cmd = f'vgcreate {vg_name} {pv}'
 
     # lv创建线形卷
     def create_lv(self,lv_size,lv_name,vg_name):
@@ -182,9 +163,6 @@ class LVM:
     def create_mirror_volume(self,mirror_volume_size,data_volume_name,replica_volume_name,mirror_volume_name,vg_name):
         cmd = f'lvcreate -L {mirror_volume_size} -m1 -n {mirror_volume_name} {vg_name} {data_volume_name} {replica_volume_name}'
 
-    """
-    容量/设置调整操作
-    """
     # 对thin pool进行扩容
     def extend_thin_pool(self,extend_sieze,thin_pool_name):
         cmd = f'lvextend -L {extend_sieze} {thin_pool_name}'
@@ -197,9 +175,6 @@ class LVM:
     def reduce_thin_volume(self,extend_sieze,thin_volume_name):
         cmd = f'lvreduce -L {extend_sieze} {thin_volume_name}'
 
-    """
-    查看操作
-    """
     # pv整体查看
     def check_pv(self):
         cmd = f'pvs'
@@ -234,21 +209,18 @@ class LVM:
 
     # lv整盘扫描查看
     def check_lv_scan(self):
-        cmd = f'vgscan'
+        cmd = f'lvscan'
 
-    """
-    删除操作
-    """
     # pv删除
     def delete_pv(self,pv_name):
-        cmd = f'pvcreate {pv_name}'
+        cmd = f'pvremove {pv_name}'
 
     # vg删除
     def delete_vg(self,vg_name):
-        cmd = f'pvcreate {vg_name}'
+        cmd = f'vgremove {vg_name}'
 
     # lv删除
     def delete_lv(self,lv_name):
-        cmd = f'pvcreate {lv_name}'
+        cmd = f'lvremove {lv_name}'
 
 
