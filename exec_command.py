@@ -9,7 +9,7 @@ class SSHconn(object):
         self._username = username
         self._password = password
         self.timeout = timeout
-        self.SSHConnection = None
+        self.sshconnection = None
         self.ssh_conn()
 
 
@@ -27,7 +27,7 @@ class SSHconn(object):
                          timeout=self.timeout,
                          look_for_keys=False,
                          allow_agent=False)
-            self.SSHConnection = conn
+            self.sshconnection = conn
         except paramiko.AuthenticationException:
             print(f" Error SSH connection message of {self._host}")
         except Exception as e:
@@ -37,8 +37,8 @@ class SSHconn(object):
         """
         命令执行
         """
-        if self.SSHConnection:
-            stdin, stdout, stderr = self.SSHConnection.exec_command(command)
+        if self.sshconnection:
+            stdin, stdout, stderr = self.sshconnection.exec_command(command)
             result = stdout.read()
             if result is not None:
                 return {"st": True, "rt": result}

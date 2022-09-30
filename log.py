@@ -43,7 +43,7 @@ class Log(object):
 
         logger.setLevel(level)
         fh = logging.FileHandler(filename=self.file_name,mode='a',encoding="UTF-8")
-        formatter = logging.Formatter(f"%(asctime)s-%(levelname)s-{self.ip}-{data1}-{data2}")
+        formatter = logging.Formatter(f"%(asctime)s - %(levelname)s - {self.ip} - {data1} - {data2}")
         fh.setFormatter(formatter)
         logger.addHandler(fh)
         return logger
