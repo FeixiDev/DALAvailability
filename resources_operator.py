@@ -1,10 +1,13 @@
 class DRBD:
+    # drbdmon
     def drbdmon(self):
         cmd = f'drbdmon'
 
+    # drbdadm status
     def drbdadm_status(self):
         cmd = f'drbdadm status'
 
+    # drbdsetup events2
     def check_events(self):
         cmd = f'drbdsetup events2'
 
@@ -201,11 +204,11 @@ class LVM:
 
     # lv整体查看
     def check_lv(self):
-        cmd = f'vgs'
+        cmd = f'lvs'
 
     # lv查看详细
-    def check_v_detailed(self,lv_name):
-        cmd = f'vgdisplay {lv_name}'
+    def check_lv_detailed(self,lv_name):
+        cmd = f'lvdisplay {lv_name}'
 
     # lv整盘扫描查看
     def check_lv_scan(self):
