@@ -54,7 +54,6 @@ class argparse_operator:
         parser_func_sync = sub_parser_func.add_parser("sync",aliases=['s'],help='data sync test')
 
         parser_func_quorum = sub_parser_func.add_parser("quorum",aliases=['q'],help='Quorum&tiebreaker test')
-        self.parser_func_quorum = parser_func_quorum
         sub_parser_func_quorum = parser_func_quorum.add_subparsers()
         sub_parser_func_quorum_target01 = sub_parser_func_quorum.add_parser("target01",aliases=['t01'],help='Quorum&tiebreaker target01 test')
         sub_parser_func_quorum_target02 = sub_parser_func_quorum.add_parser("target02",aliases=['t02'],help='Quorum&tiebreaker target02 test')
@@ -71,12 +70,11 @@ class argparse_operator:
 
         self.parser.set_defaults(func=self.main_usage)
         parser_manage.set_defaults(func=self.manage_operation)
-        parser_func.set_defaults(func=self.func_operation)
+        self.parser_func.set_defaults(func=self.func_operation)
         parser_func_primary.set_defaults(func=self.func_primary_operation)
         parser_func_promotion.set_defaults(func=self.func_promotion_operation)
         parser_func_consistency.set_defaults(fun=self.func_consistency_operation)
         parser_func_sync.set_defaults(func=self.func_sync_operation)
-        parser_func_quorum.set_defaults(fun=self.func_quorum_operation)
         sub_parser_func_quorum_target01.set_defaults(func=self.func_quorum_target01_operation)
         sub_parser_func_quorum_target02.set_defaults(func=self.func_quorum_target02_operation)
         sub_parser_func_quorum_target03.set_defaults(func=self.func_quorum_target03_operation)
@@ -112,10 +110,6 @@ class argparse_operator:
 
     def func_sync_operation(self,args):
         print("this is 'python3 main.py func sync'")
-
-    def func_quorum_operation(self,args):
-        print("this is 'python3 main.py func quorum'")
-        # print(self.parser_func_quorum.print_help())
 
     def func_quorum_target01_operation(self,args):
         print("this is 'python3 main.py func quorum target01'")
