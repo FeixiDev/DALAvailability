@@ -8,6 +8,8 @@ import argparse
 # # 功能测试
 # python3 main.py func(f) primary(pry)
 # # Single Primary
+# python3 main.py func(f) primary(pry) mount(m)
+# python3 main.py func(f) primary(pry) dd
 # python3 main.py func(f) promotion(pro)
 # # Automatic promotion
 # python3 main.py func(f) consistency(c)
@@ -49,6 +51,10 @@ class argparse_operator:
         self.parser_func = parser_func
         sub_parser_func = parser_func.add_subparsers()
         parser_func_primary = sub_parser_func.add_parser("primary",aliases=['pry'],help='Single Primary test')
+        sub_parser_func_primary = parser_func_primary.add_subparsers()
+        sub_parser_func_primary_mount = sub_parser_func_primary.add_parser("mount",aliases=['m'],help='Single primary mount&umount test')
+        sub_parser_func_primary_dd = sub_parser_func_primary.add_parser("dd",help='Single primary dd test')
+
         parser_func_promotion = sub_parser_func.add_parser("promotion",aliases=['pro'],help='Automatic promotion test')
         parser_func_consistency = sub_parser_func.add_parser("consistency",aliases=['c'],help='data consisitency test')
         parser_func_sync = sub_parser_func.add_parser("sync",aliases=['s'],help='data sync test')
@@ -72,6 +78,8 @@ class argparse_operator:
         parser_manage.set_defaults(func=self.manage_operation)
         self.parser_func.set_defaults(func=self.func_operation)
         parser_func_primary.set_defaults(func=self.func_primary_operation)
+        sub_parser_func_primary_mount.set_defaults(func=self.func_primary_mount_operation)
+        sub_parser_func_primary_dd.set_defaults(func=self.func_primary_dd_operation)
         parser_func_promotion.set_defaults(func=self.func_promotion_operation)
         parser_func_consistency.set_defaults(fun=self.func_consistency_operation)
         parser_func_sync.set_defaults(func=self.func_sync_operation)
@@ -101,6 +109,12 @@ class argparse_operator:
 
     def func_primary_operation(self,args):
         print("this is 'python3 main.py func primary'")
+
+    def func_primary_mount_operation(self,args):
+        print("this is 'python3 main.py func primary mount'")
+
+    def func_primary_dd_operation(self,args):
+        print("this is 'python3 main.py func primary dd'")
 
     def func_promotion_operation(self,args):
         print("this is 'python3 main.py func promotion'")
