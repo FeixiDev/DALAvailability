@@ -5,7 +5,7 @@ import sys
 import socket
 
 
-def get_host_ip(self):
+def get_host_ip():
     """
     查询本机ip地址
     """

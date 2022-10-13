@@ -7,12 +7,26 @@ class DRBD:
     def drbdadm_status(self):
         cmd = f'drbdadm status'
 
+    # drbdsetup status -vs
+    def drbdsetup_status(self):
+        cmd = f'drbdsetup status -vs'
+        return cmd
+
     # drbdsetup events2
     def check_events(self):
         cmd = f'drbdsetup events2'
 
 
 class Linstor:
+
+    def start_controller(self):
+        cmd = "systemctl start linstor-controller"
+        return cmd
+
+    def start_satellite(self):
+        cmd = "systemctl start linstor-satellite"
+        return cmd
+
     # node创建
     def create_node(self, node_name, ip, node_type):
         cmd = f'linstor n create {node_name} {ip} --node-type {node_type}'
@@ -108,6 +122,11 @@ class Linstor:
     # 删除指定storage pool
     def delete_sp(self,node_name,sp_name):
         cmd = f'linstor sp d {node_name} {sp_name}'
+
+    # 查看resource详细信息
+    def check_resource_lv(self):
+        cmd = f'linstor r lv'
+        return cmd
 
     # 删除指定resource definition
     def delete_rd(self,resource_name):
