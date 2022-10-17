@@ -11,6 +11,16 @@ class DRBD:
     def check_events(self):
         cmd = f'drbdsetup events2'
 
+    #资源提升为priamry状态
+    def drbdadm_priamry(self):
+        cmd = f'drbdadm primary fres'
+        return cmd
+
+    #恢复为secondary状态
+    def drbdadm_secondary(self):
+        cmd = f'drbdadm secondary fres'
+        return cmd
+
 
 class Linstor:
     # node创建
