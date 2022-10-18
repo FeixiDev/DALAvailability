@@ -41,8 +41,8 @@ class Log(object):
         else:
             print('The level must be 10,20,30,40,50')
 
-        logger.setLevel(level)
-        fh = logging.FileHandler(filename=self.file_name,mode='a',encoding="UTF-8")
+        fh = logging.FileHandler(filename=self.file_name, mode='a', encoding="UTF-8")
+        fh.setLevel(level)
         formatter = logging.Formatter(f"%(asctime)s - %(levelname)s - {self.ip} - {data1} - {data2}")
         fh.setFormatter(formatter)
         logger.addHandler(fh)

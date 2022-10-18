@@ -3,7 +3,8 @@ import utils
 import time
 import re
 import resources_operator
-import log
+import config_file
+import exec_command
 
 class YamlRead:
     def __init__(self):
@@ -17,19 +18,18 @@ class YamlRead:
 
 class MainOperation:
     def __init__(self):
-
         self.obj_yaml = YamlRead()
         self.yaml_info_list = self.obj_yaml.yaml_info
         self.linstor_cmds = resources_operator.Linstor()
         self.drbd_cmds = resources_operator.DRBD()
         self.lvm_cmds = resources_operator.LVM()
-        self.obj_controller = utils.SSHConn(host=self.yaml_info_list['node'][0]['ip']
+        self.obj_controller = exec_command.SSHconn(host=self.yaml_info_list['node'][0]['ip']
                                        ,username=self.yaml_info_list['node'][0]['username']
                                        ,password=self.yaml_info_list['node'][0]['password'])
-        self.obj_satellite01 = utils.SSHConn(host=self.yaml_info_list['node'][1]['ip']
+        self.obj_satellite01 = exec_command.SSHconn(host=self.yaml_info_list['node'][1]['ip']
                                        ,username=self.yaml_info_list['node'][1]['username']
                                        ,password=self.yaml_info_list['node'][1]['password'])
-        self.obj_satellite02 = utils.SSHConn(host=self.yaml_info_list['node'][2]['ip']
+        self.obj_satellite02 = exec_command.SSHconn(host=self.yaml_info_list['node'][2]['ip']
                                        ,username=self.yaml_info_list['node'][2]['username']
                                        ,password=self.yaml_info_list['node'][2]['password'])
 
@@ -39,6 +39,7 @@ class MainOperation:
         1、开启节点1的controller服务
         2、创建节点1的controller节点
         """
+        print("开启节点1的controller服务和创建节点1的controller节点")
         start_controller_cmd = self.linstor_cmds.start_controller()
         create_node_cmd = self.linstor_cmds.create_node(self.yaml_info_list['node'][0]['name']
                                                         ,self.yaml_info_list['node'][0]['ip']
@@ -56,6 +57,7 @@ class MainOperation:
         3、开启节点3的satellite服务
         4、创建节点3的satellite节点
         """
+        print("开启节点2和节点三的satellite服务和创建satellite节点")
         start_satellite_cmd = self.linstor_cmds.start_satellite()
         create_node_cmd01 = self.linstor_cmds.create_node(self.yaml_info_list['node'][1]['name']
                                                         ,self.yaml_info_list['node'][1]['ip']
@@ -78,6 +80,7 @@ class MainOperation:
         """
         分别在三个节点创建pv、vg
         """
+        print("分别在三个节点创建pv和vg")
         pvcreate_cmd01 = self.lvm_cmds.create_pv(self.yaml_info_list['node'][0]['disk_path'])
         pvcreate_cmd02 = self.lvm_cmds.create_pv(self.yaml_info_list['node'][1]['disk_path'])
         pvcreate_cmd03 = self.lvm_cmds.create_pv(self.yaml_info_list['node'][2]['disk_path'])
@@ -102,6 +105,7 @@ class MainOperation:
         """
         删除三个节点的node
         """
+        print("删除三个节点的node")
         delete_node_cmd01 = self.linstor_cmds.delete_node(self.yaml_info_list['node'][0]['username'])
         delete_node_cmd02 = self.linstor_cmds.delete_node(self.yaml_info_list['node'][1]['username'])
         delete_node_cmd03 = self.linstor_cmds.delete_node(self.yaml_info_list['node'][2]['username'])
@@ -118,6 +122,7 @@ class MainOperation:
         """
         删除三个节点的vg
         """
+        print("删除三个节点的vg")
         delete_vg_cmd = self.lvm_cmds.delete_vg('vgtest')
 
         utils.exec_cmd(delete_vg_cmd,self.obj_controller)
@@ -132,6 +137,7 @@ class MainOperation:
         """
         分别在三个节点上创建sp
         """
+        print("分别在三个节点上创建sp")
         create_sp_cmd01 = self.linstor_cmds.create_sp({self.yaml_info_list['node'][0]['name']},'lvm','sptest','vgtest')
         create_sp_cmd02 = self.linstor_cmds.create_sp({self.yaml_info_list['node'][1]['name']},'lvm','sptest','vgtest')
         create_sp_cmd03 = self.linstor_cmds.create_sp({self.yaml_info_list['node'][2]['name']},'lvm','sptest','vgtest')
@@ -148,6 +154,7 @@ class MainOperation:
         """
         删除三个节点上的sp
         """
+        print("删除三个节点上的sp")
         delete_sp_cmd01 = self.linstor_cmds.delete_sp({self.yaml_info_list['node'][0]['username']},'sptest')
         delete_sp_cmd02 = self.linstor_cmds.delete_sp({self.yaml_info_list['node'][1]['username']},'sptest')
         delete_sp_cmd03 = self.linstor_cmds.delete_sp({self.yaml_info_list['node'][2]['username']},'sptest')
@@ -164,6 +171,7 @@ class MainOperation:
         1、创建rd
         2、创建vd
         """
+        print("创建rd和vd")
         create_rd_cmd = self.linstor_cmds.create_rd('resourcetest01')
         create_vd_cmd = self.linstor_cmds.create_vd('resourcetest01','5G')
 
@@ -177,6 +185,7 @@ class MainOperation:
         """
         删除rd
         """
+        print("删除rd")
         delete_rd_cmd = self.linstor_cmds.delete_rd('resourcetest01')
 
         utils.exec_cmd(delete_rd_cmd, self.obj_controller)
@@ -186,6 +195,7 @@ class MainOperation:
         """
         删除所有已创建的r,必须有三个r，不然会直接退出
         """
+        print("删除所有已创建的r,必须有三个r，不然会直接退出")
         delete_r_cmd01 = self.linstor_cmds.delete_resource({self.yaml_info_list['node'][0]['username']},'resourcetest01')
         delete_r_cmd02 = self.linstor_cmds.delete_resource({self.yaml_info_list['node'][1]['username']},'resourcetest01')
         delete_r_cmd03 = self.linstor_cmds.delete_resource({self.yaml_info_list['node'][2]['username']},'resourcetest01')
@@ -207,6 +217,7 @@ class MainOperation:
         5、drbdsetup status -vs
         6、drbdsetup events2
         """
+        print("执行linstor检查命令")
         check_cmd01 = self.linstor_cmds.check_resource()
         check_cmd02 = self.linstor_cmds.check_resource_lv()
         check_cmd03 = self.drbd_cmds.drbdmon()
@@ -232,6 +243,7 @@ class MainOperation:
         """
         检查error reports
         """
+        print("检查error reports")
         check_error_list_cmd = self.linstor_cmds.check_error_reports_list()
 
         error_list = utils.exec_cmd(check_error_list_cmd, self.obj_controller)
@@ -245,6 +257,7 @@ class MainOperation:
         """
         配置auto-promote
         """
+        print("配置auto-promote")
         adjust_config_cmd = self.linstor_cmds.adjust_linstor_resource_settings('auto-promote','no','resourcetest01')
         unset_config_cmd = self.linstor_cmds.unset_linstor_resource_settings('auto-promote','no','resourcetest01')
 
@@ -256,6 +269,7 @@ class MainOperation:
         """
         自动放置3diskful
         """
+        print("自动放置3diskful")
         create_r_cmd = self.linstor_cmds.create_diskful_resource_auto('resourcetest01','3')
 
         utils.exec_cmd(create_r_cmd, self.obj_controller)
@@ -266,6 +280,7 @@ class MainOperation:
         """
         以第二和第三节点创建两个diskful
         """
+        print("以第二和第三节点创建两个diskful")
         create_diskful_cmd01 = self.linstor_cmds.create_diskful_resource({self.yaml_info_list['node'][1]['username']},'resourcetest01','sptest')
         create_diskful_cmd02 = self.linstor_cmds.create_diskful_resource({self.yaml_info_list['node'][2]['username']},'resourcetest01','sptest')
 
@@ -276,6 +291,7 @@ class MainOperation:
         """
         必须在2diskful基础上进行,新增一个diskless
         """
+        print("必须在2diskful基础上进行,新增一个diskless")
         create_diskless_cmd = self.linstor_cmds.create_diskless_resource({self.yaml_info_list['node'][0]['username']},'resourcetest01')
 
         utils.exec_cmd(create_diskless_cmd, self.obj_controller)
@@ -284,6 +300,7 @@ class MainOperation:
         """
         改变vd的容量，达成扩容的目的
         """
+        print("改变vd的容量，达成扩容的目的")
         change_vdsize_cmd = self.linstor_cmds.adjust_resource_size('resourcetest01','0','10G')
         utils.exec_cmd(change_vdsize_cmd, self.obj_controller)
 
@@ -293,6 +310,7 @@ class MainOperation:
         2、创建卷组
         3、放置资源
         """
+        print("资源组的操作")
         create_rg_cmd = self.linstor_cmds.create_resource_group('rgtest01','sptest','1')
         create_vg_cmd = self.linstor_cmds.create_volume_group('rgtest01')
         create_r_by_rg_cmd = self.linstor_cmds.create_resource_by_rg('rgtest01','resourcetest03','2G')
@@ -308,6 +326,7 @@ class MainOperation:
         """
         删除rg
         """
+        print("删除rg")
         delete_vg_cmd = self.linstor_cmds.delete_resource_group('rgtest01')
         delete_rg_cmd = self.linstor_cmds.delete_volume_group('rgtest01','0')
 
@@ -317,7 +336,6 @@ class MainOperation:
         time.sleep(2)
 
 def main():
-    obj_log = log.Log()
     obj_mainoperation = MainOperation()
     obj_mainoperation.configuring_controller()
     obj_mainoperation.configuring_satallite()

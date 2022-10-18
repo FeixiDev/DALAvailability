@@ -1,19 +1,19 @@
 node:
-  - name: node01
-    ip: 10.203.1.238
-    bond_ip: None
-    username: root
-    password: password
-    disk_path: /dev/sda2
-  - name: node02
-    ip: 10.203.1.111
-    bond_ip: None
-    username: root
-    password: password
-    disk_path: /dev/sda2
-  - name: node03
-    ip: 10.203.1.240
-    bond_ip: None
-    username: root
-    password: 8500960
-    disk_path: /dev/sda2
+  - name:   #做diskless
+    ip:
+    bond_ip:
+    username:
+    password:
+    disk_path:
+  - name:   #做diskful
+    ip:
+    bond_ip:
+    username:
+    password:
+    disk_path:
+  - name:   #做diskful
+    ip:
+    bond_ip: 
+    username:
+    password:
+    disk_path:

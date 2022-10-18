@@ -24,9 +24,19 @@ class DRBD:
         cmd = f"drbdadm pause-sync {r_name}"
         return cmd
 
+    #停止资源的同步
+    def start_sync(self,r_name):
+        cmd = f"drbdadm resume-sync {r_name}"
+        return cmd
+
     #提升为primary
     def set_primary(self,r_name):
         cmd = f"drbdadm primary {r_name}"
+        return cmd
+
+    #提升为Secondary
+    def set_secondary(self,r_name):
+        cmd = f"drbdadm secondary {r_name}"
         return cmd
 
 
@@ -157,6 +167,10 @@ class Linstor:
     # 查看resource信息
     def check_resource(self):
         cmd = f'linstor r l'
+        return cmd
+
+    def check_resource_detailed(self,r_name):
+        cmd = f"linstor r lv | grep {r_name}"
         return cmd
 
 
