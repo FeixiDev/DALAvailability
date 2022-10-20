@@ -20,7 +20,7 @@ class SSHconn(object):
         try:
             conn = paramiko.SSHClient()
             conn.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            conn.connect(host=self._host,
+            conn.connect(hostname=self._host,
                          username=self._username,
                          port=self._port,
                          password=self._password,
@@ -72,7 +72,7 @@ class SSHconn(object):
 
 
 class LocalProcess(object):
-    def exec_cmd(command):
+    def exec_cmd(self,command):
         """
         命令执行
         """
