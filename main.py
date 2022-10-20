@@ -1,4 +1,5 @@
 import argparse
+import controller
 
 # python3 main.py
 # # 一键执行全部测试
@@ -126,7 +127,7 @@ class argparse_operator:
         print("this is 'python3 main.py func sync'")
 
     def func_quorum_target01_operation(self,args):
-        print("this is 'python3 main.py func quorum target01'")
+        controller.QuorumTest().main()
 
     def func_quorum_target02_operation(self,args):
         print("this is 'python3 main.py func quorum target02'")
@@ -142,10 +143,10 @@ class argparse_operator:
         print(self.parser_other.print_help())
 
     def other_response_operation(self,args):
-        print("this is 'python3 main.py other response'")
+        controller.LinstorCommandResponse().main()
 
     def other_evicition_operation(self,args):
-        print("this is 'python3 main.py other evicition'")
+        controller.LinstorEviction().main()
 
     def other_gituple_operation(self,args):
         print("this is 'python3 main.py other gituple'")

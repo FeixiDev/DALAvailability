@@ -237,3 +237,13 @@ class LVM:
         cmd = f'lvremove {lv_name}'
 
 
+class DISK:
+
+    def mkfs_disk(self,drbd_route):
+        cmd = f'mkfs.ext4 {drbd_route}'
+
+    def mount_disk(self,drbd_route):
+        cmd = f'mount {drbd_route}/mnt'
+
+    def umount_disk(self,drbd_route):
+        cmd = f'umount {drbd_route}'
