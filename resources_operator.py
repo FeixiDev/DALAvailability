@@ -39,6 +39,16 @@ class DRBD:
         cmd = f"drbdadm secondary {r_name}"
         return cmd
 
+    #资源提升为priamry状态
+    def drbdadm_priamry(self):
+        cmd = f'drbdadm primary fres'
+        return cmd
+
+    #恢复为secondary状态
+    def drbdadm_secondary(self):
+        cmd = f'drbdadm secondary fres'
+        return cmd
+
 
 class Linstor:
 
@@ -375,3 +385,13 @@ class LVM:
 
 
 
+class DISK:
+
+    def mkfs_disk(self,drbd_route):
+        cmd = f'mkfs.ext4 {drbd_route}'
+
+    def mount_disk(self,drbd_route):
+        cmd = f'mount {drbd_route}/mnt'
+
+    def umount_disk(self,drbd_route):
+        cmd = f'umount {drbd_route}'
