@@ -1,5 +1,7 @@
 import argparse
 import controller
+import manage
+import inconsistent_test
 
 # python3 main.py
 # # 一键执行全部测试
@@ -103,7 +105,7 @@ class argparse_operator:
             self.perform_all_tests(args)
 
     def manage_operation(self,args):
-        print("this is 'python3 main.py manage'")
+        manage.main()
 
     def func_operation(self,args):
         self.parser_func.print_help()
@@ -136,7 +138,7 @@ class argparse_operator:
         print("this is 'python3 main.py func quorum target03'")
 
     def func_status_operation(self,args):
-        print("this is 'python3 main.py func status'")
+        inconsistent_test.main()
 
     def other_operation(self,args):
         print("this is 'python3 main.py other'")
