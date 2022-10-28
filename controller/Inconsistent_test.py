@@ -80,7 +80,7 @@ class MainOperation:
     有node，vd，vg
     """
     def __init__(self):
-        self.obj_yaml = config_file.ConfFile('./config.yaml')
+        self.obj_yaml = config_file.ConfFile('../config.yaml')
         self.yaml_info_list = self.obj_yaml.read_yaml()
         self.linstor_cmds = resources_operator.Linstor()
         self.drbd_cmds = resources_operator.DRBD()
