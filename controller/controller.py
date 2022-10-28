@@ -13,7 +13,7 @@ class SinglePrimary(object):
     """
 
     def __int__(self):
-        self.yaml_file = config_file.ConfFile('./config.yaml')
+        self.yaml_file = config_file.ConfFile('../config.yaml')
         self.yaml_info_list = self.yaml_file.read_yaml()
         self.controller_node = exec_command.SSHconn(host=self.yaml_info_list['node'][0]['ip']
                                        ,username=self.yaml_info_list['node'][0]['username']
@@ -95,7 +95,7 @@ class AutomaticPromotion(object):
     """
 
     def __int__(self,drbd_route):
-        self.yaml_file = config_file.ConfFile('./config.yaml')
+        self.yaml_file = config_file.ConfFile('../config.yaml')
         self.yaml_info_list = self.yaml_file.read_yaml()
         self.controller_node = exec_command.SSHconn(host=self.yaml_info_list['node'][0]['ip']
                                                     , username=self.yaml_info_list['node'][0]['username']
@@ -173,7 +173,7 @@ class DiscardSupport(object):
      """
 
     def __int__(self):
-        self.yaml_file = config_file.ConfFile('./config.yaml')
+        self.yaml_file = config_file.ConfFile('../config.yaml')
         self.yaml_info_list = self.yaml_file.read_yaml()
         self.controller_node = exec_command.SSHconn(host=self.yaml_info_list['node'][0]['ip']
                                                     , username=self.yaml_info_list['node'][0]['username']
@@ -202,7 +202,7 @@ class LinstorEviction(object):
     """
 
     def __int__(self, name):
-        self.yaml_file = config_file.ConfFile('./config.yaml')
+        self.yaml_file = config_file.ConfFile('../config.yaml')
         self.yaml_info_list = self.yaml_file.read_yaml()
         self.controller_node = exec_command.SSHconn(host=self.yaml_info_list['node'][0]['ip']
                                                     , username=self.yaml_info_list['node'][0]['username']
@@ -292,7 +292,7 @@ class QuorumTest(object):
     quorum(q) target01(t01)
     """
     def __int__(self,dev):
-        self.yaml_file = config_file.ConfFile('./config.yaml')
+        self.yaml_file = config_file.ConfFile('../config.yaml')
         self.yaml_info_list = self.yaml_file.read_yaml()
         self.controller_node = exec_command.SSHconn(host=self.yaml_info_list['node'][0]['ip']
                                                         , username=self.yaml_info_list['node'][0]['username']
