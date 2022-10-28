@@ -1,15 +1,13 @@
-import exec_command
+import utils
 class DeviceService(object):
-    def __int__(self, ssh_conn=None):
-        self.ssh_conn = ssh_conn
-        self.obj_conn = exec_command.SSHconn()
-    def down_device(self,dev):
+
+    def down_device(self,dev, ssh_conn=None):
         cmd = f'ifconfig {dev} down'
-        result = self.obj_conn.exec_cmd(cmd, self.ssh_conn)
+        result = utils.exec_cmd(cmd,ssh_conn)
         return result
 
 
-    def up_device(self,dev):
+    def up_device(self,dev, ssh_conn=None):
         cmd = f'nmcli device connect {dev}'
-        result = self.obj_conn.exec_cmd(cmd, self.ssh_conn)
+        result = utils.exec_cmd(cmd,ssh_conn)
         return result

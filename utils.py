@@ -21,24 +21,22 @@ def exec_cmd(cmd, conn=None):
 
 
 class RWData(object):
-    def __int__(self, ssh_conn=None):
-        self.ssh_conn = ssh_conn
-        self.obj_conn = exec_command.SSHconn()
-    def dd_write(self,device_name):
+
+    def dd_write(self,device_name, ssh_conn=None):
         cmd = f'dd if=/dev/urandom of={device_name} oflag=direct status=progress'
-        result = self.obj_conn.exec_cmd(cmd, self.ssh_conn)
+        result = exec_cmd(cmd,ssh_conn)
         return result
 
 
-    def dd_read(self,device_name,read_test_path):
+    def dd_read(self,device_name,read_test_path, ssh_conn=None):
         cmd = f"dd if={device_name} of={read_test_path} oflag=direct status=progress"
-        result = self.obj_conn.exec_cmd(cmd, self.ssh_conn)
+        result = exec_cmd(cmd,ssh_conn)
         return result
 
 
-    def kill_dd(self,dd_pid):
+    def kill_dd(self,dd_pid, ssh_conn=None):
         cmd = f'kill {dd_pid}'
-        result = self.obj_conn.exec_cmd(cmd, self.ssh_conn)
+        result = exec_cmd(cmd,ssh_conn)
         return result
 
         
