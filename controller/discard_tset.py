@@ -33,3 +33,5 @@ class DiscardSupport(object):
 
         else:
             print('Test,failed')
+    def main(self):
+        DiscardSupport().discard_support()
