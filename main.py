@@ -1,6 +1,6 @@
 import argparse
 import controller
-import manage
+from DALAvailability.controller import manage
 import inconsistent_test
 
 # python3 main.py

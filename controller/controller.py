@@ -5,7 +5,7 @@ import resources_operator
 import re
 import config_file
 import network_operator
-
+from .. import log
 
 class SinglePrimary(object):
     """

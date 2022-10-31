@@ -11,3 +11,10 @@ class DeviceService(object):
         cmd = f'nmcli device connect {dev}'
         result = utils.exec_cmd(cmd,ssh_conn)
         return result
+
+class Scp:
+
+    def local_to_remote_file(self,local_file,remote_username,remote_ip,remote_folder,ssh_conn=None):
+        cmd = f'scp {local_file} {remote_username}@{remote_ip}:{remote_folder}'
+        result = utils.exec_cmd(cmd,ssh_conn)
+        return result
