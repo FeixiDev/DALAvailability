@@ -1,9 +1,27 @@
-import prettytable
+from prettytable import PrettyTable
 import subprocess
 import sys
 import paramiko
-import log
+import logging
 import exec_command
+import logging
+import logging.handlers
+import datetime
+import sys
+import socket
+
+def get_host_ip():
+    """
+    查询本机ip地址
+    """
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+    finally:
+        s.close()
+    return ip
+
 
 def exec_cmd(cmd, conn=None):
     local_obj = exec_command.LocalProcess()
@@ -11,13 +29,15 @@ def exec_cmd(cmd, conn=None):
         result = conn.exec_cmd(cmd)
     else:
         result = local_obj.exec_cmd(cmd)
-    log.Log().write_to_log(cmd, result['rt'], 30)
-    if result['st']:
+    result = result.decode() if isinstance(result, bytes) else result
+    log_data = f'{get_host_ip()} - {cmd} - {result}'
+    Log().logger.info(log_data)
+    if result:
         pass
         # f_result = result['rt'].rstrip('\n')
-    if result['st'] is False:
+    if result is False:
         sys.exit()
-    return result['rt']
+    return result
 
 
 class RWData(object):
@@ -39,20 +59,37 @@ class RWData(object):
         result = exec_cmd(cmd,ssh_conn)
         return result
 
-        
+
+
+class Log(object):
+    def __init__(self):
+        pass
+
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(cls, '_instance'):
+            Log._instance = super().__new__(cls)
+            Log._instance.logger = logging.getLogger()
+            Log._instance.logger.setLevel(logging.INFO)
+            Log.set_handler(Log._instance.logger)
+        return Log._instance
+
+    @staticmethod
+    def set_handler(logger):
+        now_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+        file_name = str(now_time) + '.log'
+        fh = logging.FileHandler(file_name, mode='a')
+        fh.setLevel(logging.DEBUG)
+        formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+        fh.setFormatter(formatter)
+        logger.addHandler(fh)
+
 
 class Table(object):
-    def __init__(self):
-        self.header = None
-        self.data = None
-        self.table = prettytable.PrettyTable()
+    def __init__(self,field_name):
+        self.table = PrettyTable(field_name)
 
-    def add_data(self, list_data):
+    def add_row(self, list_data):
         self.table.add_row(list_data)
 
-    def add_column(self, fieldname, list_column):
-        self.table.add_column(fieldname, list_column)
-
     def print_table(self):
-        self.table.field_names = self.header
         print(self.table)

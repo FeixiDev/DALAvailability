@@ -74,7 +74,7 @@ class DdOperation:
 class MainOperation:
     """
     默认环境已经配置完成
-    有node，vd，vg:50G
+    有node
     """
     def __init__(self):
         self.obj_yaml = config_file.ConfFile('../config.yaml')
@@ -94,21 +94,21 @@ class MainOperation:
 
     def create_50G_r(self):
         """
-        创建资源:创建r
+        创建资源:创建sp,rd,vd,r
         """
-        create_diskful1 = self.linstor_cmds.create_diskful_resource(self.yaml_info_list['node'][1]['username'],'resourcetest01','sptest',self.obj_satellite01)
-        create_diskful2 = self.linstor_cmds.create_diskful_resource(self.yaml_info_list['node'][2]['username'],'resourcetest01','sptest',self.obj_satellite02)
-        create_diskless = self.linstor_cmds.create_diskless_resource(self.yaml_info_list['node'][0]['username'],'resourcetest01',self.obj_controller)
+        create_sp1 = self.linstor_cmds.create_sp(self.yaml_info_list['node'][0]['name'],'lvm','sptest','vgtest',self.obj_controller)
+        create_sp2 = self.linstor_cmds.create_sp(self.yaml_info_list['node'][1]['name'],'lvm','sptest','vgtest',self.obj_satellite01)
+        create_sp3 = self.linstor_cmds.create_sp(self.yaml_info_list['node'][2]['name'],'lvm','sptest','vgtest',self.obj_satellite02)
+
+        create_rd = self.linstor_cmds.create_rd('resourcetest01',self.obj_controller)
+        create_vd = self.linstor_cmds.create_vd('resourcetest01','50G',self.obj_controller)
+
+        create_diskful1 = self.linstor_cmds.create_diskful_resource(self.yaml_info_list['node'][1]['name'],'resourcetest01','sptest',self.obj_satellite01)
+        create_diskful2 = self.linstor_cmds.create_diskful_resource(self.yaml_info_list['node'][2]['name'],'resourcetest01','sptest',self.obj_satellite02)
+        create_diskless = self.linstor_cmds.create_diskless_resource(self.yaml_info_list['node'][0]['name'],'resourcetest01',self.obj_controller)
 
 
     def test(self):
-        stop_sync_cmd = self.drbd_cmds.stop_sync("resourcetest01")
-        check_r_cmd = self.linstor_cmds.check_resource()
-        set_primary_cmd = self.drbd_cmds.set_primary("resourcetest01")
-        set_secondary_cmd = self.drbd_cmds.set_secondary("resourcetest01")
-        drbdadm_status_cmd = self.drbd_cmds.drbdadm_status()
-        start_sync_cmd = self.drbd_cmds.start_sync("resourcetest01")
-        check_r_detailed = self.linstor_cmds.check_resource_detailed("resourcetest01")
 
         check_result01 = self.linstor_cmds.check_resource(self.obj_controller)
         in_node_name_f = re.findall(r'resourcetest01[\s]*┊[\s]*([\w]*)[\s]*┊[\s]*[\w]*[\s]*┊[\s]*[\w]*[\s]*┊[\s]*[\w]*[\s]*┊[\s]*SyncTarget', str(check_result01))

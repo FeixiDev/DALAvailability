@@ -89,7 +89,7 @@ class Linstor(object):
 
     # resource definition创建
     def create_rd(self, rd_name, ssh_conn=None):
-        cmd = f'linsotr rd create {rd_name}'
+        cmd = f'linstor rd create {rd_name}'
         result = utils.exec_cmd(cmd, ssh_conn)
         return result
 

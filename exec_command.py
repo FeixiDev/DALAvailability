@@ -40,6 +40,7 @@ class SSHconn(object):
         if self.sshconnection:
             stdin, stdout, stderr = self.sshconnection.exec_command(command)
             result = stdout.read()
+            result = result.decode() if isinstance(result, bytes) else result
             if result is not None:
                 return {"st": True, "rt": result}
 

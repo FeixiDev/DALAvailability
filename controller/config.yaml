@@ -1,0 +1,19 @@
+node:
+  - name: test01   #做diskless
+    ip: 10.203.1.238
+    bond_ip:
+    username: root
+    password: password
+    disk_path:  /dev/sda2
+  - name: test02  #做diskful
+    ip: 10.203.1.169
+    bond_ip:
+    username: root
+    password: password
+    disk_path:  /dev/sda2
+  - name: test03  #做diskful
+    ip: 10.203.1.111
+    bond_ip:
+    username: root
+    password: password
+    disk_path: /dev/sda2

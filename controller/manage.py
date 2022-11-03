@@ -1,3 +1,5 @@
+import sys
+sys.path.append("..")
 import yaml
 from .. import utils
 import time
@@ -93,9 +95,9 @@ class MainOperation:
         删除三个节点的node
         """
         print("删除三个节点的node")
-        delete_node1 = self.linstor_cmds.delete_node(self.yaml_info_list['node'][0]['username'],self.obj_controller)
-        delete_node2 = self.linstor_cmds.delete_node(self.yaml_info_list['node'][1]['username'],self.obj_satellite01)
-        delete_node3 = self.linstor_cmds.delete_node(self.yaml_info_list['node'][2]['username'],self.obj_satellite02)
+        delete_node1 = self.linstor_cmds.delete_node(self.yaml_info_list['node'][0]['name'],self.obj_controller)
+        delete_node2 = self.linstor_cmds.delete_node(self.yaml_info_list['node'][1]['name'],self.obj_satellite01)
+        delete_node3 = self.linstor_cmds.delete_node(self.yaml_info_list['node'][2]['name'],self.obj_satellite02)
 
     def delete_vg_all(self):
         """
@@ -112,9 +114,9 @@ class MainOperation:
         分别在三个节点上创建sp
         """
         print("分别在三个节点上创建sp")
-        create_sp1 = self.linstor_cmds.create_sp({self.yaml_info_list['node'][0]['name']},'lvm','sptest','vgtest',self.obj_controller)
-        create_sp2 = self.linstor_cmds.create_sp({self.yaml_info_list['node'][1]['name']},'lvm','sptest','vgtest',self.obj_satellite01)
-        create_sp3 = self.linstor_cmds.create_sp({self.yaml_info_list['node'][2]['name']},'lvm','sptest','vgtest',self.obj_satellite02)
+        create_sp1 = self.linstor_cmds.create_sp(self.yaml_info_list['node'][0]['name'],'lvm','sptest','vgtest',self.obj_controller)
+        create_sp2 = self.linstor_cmds.create_sp(self.yaml_info_list['node'][1]['name'],'lvm','sptest','vgtest',self.obj_satellite01)
+        create_sp3 = self.linstor_cmds.create_sp(self.yaml_info_list['node'][2]['name'],'lvm','sptest','vgtest',self.obj_satellite02)
 
 
     def delete_sp(self):
@@ -122,9 +124,9 @@ class MainOperation:
         删除三个节点上的sp
         """
         print("删除三个节点上的sp")
-        delete_sp1 = self.linstor_cmds.delete_sp({self.yaml_info_list['node'][0]['username']},'sptest',self.obj_controller)
-        delete_sp2 = self.linstor_cmds.delete_sp({self.yaml_info_list['node'][1]['username']},'sptest',self.obj_satellite01)
-        delete_sp3 = self.linstor_cmds.delete_sp({self.yaml_info_list['node'][2]['username']},'sptest',self.obj_satellite02)
+        delete_sp1 = self.linstor_cmds.delete_sp(self.yaml_info_list['node'][0]['name'],'sptest',self.obj_controller)
+        delete_sp2 = self.linstor_cmds.delete_sp(self.yaml_info_list['node'][1]['name'],'sptest',self.obj_satellite01)
+        delete_sp3 = self.linstor_cmds.delete_sp(self.yaml_info_list['node'][2]['name'],'sptest',self.obj_satellite02)
 
 
     def create_rd_vd(self):
@@ -134,7 +136,7 @@ class MainOperation:
         """
         print("创建rd和vd")
         create_rd = self.linstor_cmds.create_rd('resourcetest01',self.obj_controller)
-        create_vd = self.linstor_cmds.create_vd('resourcetest01','5G',self.obj_satellite01)
+        create_vd = self.linstor_cmds.create_vd('resourcetest01','5G',self.obj_controller)
 
 
     def delete_rd(self):
@@ -150,9 +152,9 @@ class MainOperation:
         删除所有已创建的r,必须有三个r，不然会直接退出
         """
         print("删除所有已创建的r,必须有三个r，不然会直接退出")
-        delete_r1 = self.linstor_cmds.delete_resource(self.yaml_info_list['node'][0]['username'],'resourcetest01',self.obj_controller)
-        delete_r2 = self.linstor_cmds.delete_resource(self.yaml_info_list['node'][1]['username'],'resourcetest01',self.obj_controller)
-        delete_r3 = self.linstor_cmds.delete_resource(self.yaml_info_list['node'][2]['username'],'resourcetest01',self.obj_controller)
+        delete_r1 = self.linstor_cmds.delete_resource(self.yaml_info_list['node'][0]['name'],'resourcetest01',self.obj_controller)
+        delete_r2 = self.linstor_cmds.delete_resource(self.yaml_info_list['node'][1]['name'],'resourcetest01',self.obj_controller)
+        delete_r3 = self.linstor_cmds.delete_resource(self.yaml_info_list['node'][2]['name'],'resourcetest01',self.obj_controller)
 
 
     def check_drbd(self):
@@ -165,12 +167,18 @@ class MainOperation:
         6、drbdsetup events2
         """
         print("执行linstor检查命令")
+        print("linstor r l")
         check_cmd01 = self.linstor_cmds.check_resource(self.obj_controller)
+        print("linstor r lv")
         check_cmd02 = self.linstor_cmds.check_resource_lv(self.obj_controller)
-        check_cmd03 = self.drbd_cmds.drbdmon(self.obj_controller)
+        # print("drbdmon")
+        # check_cmd03 = self.drbd_cmds.drbdmon(self.obj_controller)
+        print("drbdadm status")
         check_cmd04 = self.drbd_cmds.drbdadm_status(self.obj_controller)
+        print("drbdsetup status -vs")
         check_cmd05 = self.drbd_cmds.drbdsetup_status(self.obj_controller)
-        check_cmd06 = self.drbd_cmds.check_events(self.obj_controller)
+        # print("drbdsetup events2")
+        # check_cmd06 = self.drbd_cmds.check_events(self.obj_controller)
 
 
     def check_error_reports(self):
@@ -179,11 +187,12 @@ class MainOperation:
         """
         print("检查error reports")
         check_error_list = self.linstor_cmds.check_error_reports_list(self.obj_controller)
-
         time.sleep(2)
         error_number = re.findall(r'\w{8}-\w{5}-\w{6}',check_error_list)
+        print(error_number)
+        error_number01 = error_number[0]
 
-        check_error_cmd = self.linstor_cmds.check_error_reports_specific(error_number,self.obj_controller)
+        check_error_cmd = self.linstor_cmds.check_error_reports_specific(error_number01,self.obj_controller)
 
     def configuring_resource(self):
         """
@@ -206,15 +215,15 @@ class MainOperation:
         以第二和第三节点创建两个diskful
         """
         print("以第二和第三节点创建两个diskful")
-        create_diskful_cmd01 = self.linstor_cmds.create_diskful_resource({self.yaml_info_list['node'][1]['username']},'resourcetest01','sptest',self.obj_satellite01)
-        create_diskful_cmd02 = self.linstor_cmds.create_diskful_resource({self.yaml_info_list['node'][2]['username']},'resourcetest01','sptest',self.obj_satellite02)
+        create_diskful_cmd01 = self.linstor_cmds.create_diskful_resource(self.yaml_info_list['node'][1]['name'],'resourcetest01','sptest',self.obj_satellite01)
+        create_diskful_cmd02 = self.linstor_cmds.create_diskful_resource(self.yaml_info_list['node'][2]['name'],'resourcetest01','sptest',self.obj_satellite02)
 
     def resource_operation_2diskful1diskless(self):
         """
         必须在2diskful基础上进行,新增一个diskless
         """
         print("必须在2diskful基础上进行,新增一个diskless")
-        create_diskless_cmd = self.linstor_cmds.create_diskless_resource({self.yaml_info_list['node'][0]['username']},'resourcetest01',self.obj_controller)
+        create_diskless_cmd = self.linstor_cmds.create_diskless_resource(self.yaml_info_list['node'][0]['name'],'resourcetest01',self.obj_controller)
 
     def exchange_vd_size(self):
         """
