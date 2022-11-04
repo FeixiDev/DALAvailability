@@ -1,9 +1,9 @@
 import time
-import resources_operator
-import utils
-import exec_command
+from .. import resources_operator
+from .. import utils
+from .. import exec_command
 import re
-import config_file
+from .. import config_file
 import sys
 from threading import Thread
 
@@ -17,9 +17,8 @@ class DdOperation:
         self.obj_dd = utils.RWData()
 
     def get_devicename(self):
-        check_cmd = self.linstor_cmds.check_resource_detailed(self.r_name)
-        info = utils.exec_cmd(check_cmd,self.obj_ssh)
-        data = re.findall(f'\|([\w\s\/]+)', info)
+        check_cmd = self.linstor_cmds.check_resource_detailed(self.r_name,self.obj_ssh)
+        data = re.findall(f'\|([\w\s\/]+)', check_cmd)
         data1 = data[5]
         data2 = data1.strip()
         print(f"devicename已获取，为{data2}")
@@ -29,8 +28,7 @@ class DdOperation:
         try:
             devicename = self.get_devicename()
             print("................................线程1:开始执行dd写数据操作")
-            dd_write_cmd = self.obj_dd.dd_write(devicename)
-            utils.exec_cmd(dd_write_cmd, self.obj_ssh)
+            dd_write = self.obj_dd.dd_write(devicename,self.obj_ssh)
             time.sleep(5)
             print(".....................dd写数据操作执行完毕,dd进程已被关闭")
         except:
@@ -41,8 +39,7 @@ class DdOperation:
         try:
             devicename = self.get_devicename()
             print("................................线程1:开始执行dd读数据操作")
-            dd_write_cmd = self.obj_dd.dd_read(devicename,'./test.txt')
-            utils.exec_cmd(dd_write_cmd, self.obj_ssh)
+            dd_read = self.obj_dd.dd_read(devicename,'./test.txt',self.obj_ssh)
             time.sleep(5)
             print(".....................dd读数据操作执行完毕,dd进程已被关闭")
         except:
@@ -77,7 +74,7 @@ class DdOperation:
 class MainOperation:
     """
     默认环境已经配置完成
-    有node，vd，vg
+    有node
     """
     def __init__(self):
         self.obj_yaml = config_file.ConfFile('../config.yaml')
@@ -97,28 +94,23 @@ class MainOperation:
 
     def create_50G_r(self):
         """
-        创建资源:创建r
+        创建资源:创建sp,rd,vd,r
         """
-        create_diskful_cmd01 = self.linstor_cmds.create_diskful_resource({self.yaml_info_list['node'][1]['username']},'resourcetest01','sptest')
-        create_diskful_cmd02 = self.linstor_cmds.create_diskful_resource({self.yaml_info_list['node'][2]['username']},'resourcetest01','sptest')
+        create_sp1 = self.linstor_cmds.create_sp(self.yaml_info_list['node'][0]['name'],'lvm','sptest','vgtest',self.obj_controller)
+        create_sp2 = self.linstor_cmds.create_sp(self.yaml_info_list['node'][1]['name'],'lvm','sptest','vgtest',self.obj_satellite01)
+        create_sp3 = self.linstor_cmds.create_sp(self.yaml_info_list['node'][2]['name'],'lvm','sptest','vgtest',self.obj_satellite02)
 
-        utils.exec_cmd(create_diskful_cmd01, self.obj_satellite01)
-        utils.exec_cmd(create_diskful_cmd02, self.obj_satellite02)
+        create_rd = self.linstor_cmds.create_rd('resourcetest01',self.obj_controller)
+        create_vd = self.linstor_cmds.create_vd('resourcetest01','50G',self.obj_controller)
 
-        create_diskless_cmd = self.linstor_cmds.create_diskless_resource({self.yaml_info_list['node'][0]['username']},'resourcetest01')
+        create_diskful1 = self.linstor_cmds.create_diskful_resource(self.yaml_info_list['node'][1]['name'],'resourcetest01','sptest',self.obj_satellite01)
+        create_diskful2 = self.linstor_cmds.create_diskful_resource(self.yaml_info_list['node'][2]['name'],'resourcetest01','sptest',self.obj_satellite02)
+        create_diskless = self.linstor_cmds.create_diskless_resource(self.yaml_info_list['node'][0]['name'],'resourcetest01',self.obj_controller)
 
-        utils.exec_cmd(create_diskless_cmd, self.obj_controller)
 
     def test(self):
-        stop_sync_cmd = self.drbd_cmds.stop_sync("resourcetest01")
-        check_r_cmd = self.linstor_cmds.check_resource()
-        set_primary_cmd = self.drbd_cmds.set_primary("resourcetest01")
-        set_secondary_cmd = self.drbd_cmds.set_secondary("resourcetest01")
-        drbdadm_status_cmd = self.drbd_cmds.drbdadm_status()
-        start_sync_cmd = self.drbd_cmds.start_sync("resourcetest01")
-        check_r_detailed = self.linstor_cmds.check_resource_detailed("resourcetest01")
 
-        check_result01 = utils.exec_cmd(check_r_cmd, self.obj_controller)
+        check_result01 = self.linstor_cmds.check_resource(self.obj_controller)
         in_node_name_f = re.findall(r'resourcetest01[\s]*┊[\s]*([\w]*)[\s]*┊[\s]*[\w]*[\s]*┊[\s]*[\w]*[\s]*┊[\s]*[\w]*[\s]*┊[\s]*SyncTarget', str(check_result01))
         in_node_name = in_node_name_f[0]
 
@@ -131,16 +123,16 @@ class MainOperation:
                                        ,username=node_info['username']
                                        ,password=node_info['password'])
 
-        utils.exec_cmd(stop_sync_cmd, in_ssh_obj)
+        self.drbd_cmds.stop_sync("resourcetest01",in_ssh_obj)
         time.sleep(5)
-        utils.exec_cmd(set_primary_cmd, in_ssh_obj)
+        self.drbd_cmds.set_primary("resourcetest01",in_ssh_obj)
         time.sleep(5)
-        check_result02 = utils.exec_cmd(drbdadm_status_cmd,in_ssh_obj)
+        check_result02 = self.drbd_cmds.drbdadm_status(in_ssh_obj)
         role_status_f = re.findall(r'fres role:([\w]*)\n', str(check_result02))
         if role_status_f[0] == 'Primary':
             print("resource status : Primary")
             time.sleep(5)
-            utils.exec_cmd(set_secondary_cmd, in_ssh_obj)
+            self.drbd_cmds.set_secondary("resourcetest01",in_ssh_obj)
             print("resource status is set to : Secondary")
         elif role_status_f == 'Secondary':
             print("resource status : Secondary")
@@ -156,11 +148,11 @@ class MainOperation:
         time.sleep(5)
         obj_dd.stop_dd()
 
-        utils.exec_cmd(start_sync_cmd,in_ssh_obj)
+        self.drbd_cmds.start_sync("resourcetest01",in_ssh_obj)
 
         node1_name = self.yaml_info_list['node'][1]['name']
         node2_name = self.yaml_info_list['node'][2]['name']
-        info = utils.exec_cmd(check_r_cmd,in_ssh_obj)
+        info = self.linstor_cmds.check_resource(in_ssh_obj)
         result1 = re.findall(r'(%s)[\w\W]*(UpToDate)' % node1_name, info)
         result2 = re.findall(r'(%s)[\w\W]*(UpToDate)' % node2_name, info)
         a = False
@@ -175,7 +167,7 @@ class MainOperation:
 
             except:
                 time.sleep(30)
-                info = utils.exec_cmd(check_r_cmd,in_ssh_obj)
+                info = self.linstor_cmds.check_resource(in_ssh_obj)
                 result1 = re.findall(r'(%s)[\w\W]*(UpToDate)' % node1_name, info)
                 result2 = re.findall(r'(%s)[\w\W]*(UpToDate)' % node2_name, info)
                 print('Synchronizing........')
