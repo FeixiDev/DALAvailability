@@ -1,0 +1,19 @@
+node:
+  - name:   #做diskless
+    ip:
+    bond_ip:
+    username:
+    password:
+    disk_path:
+  - name:   #做diskful
+    ip:
+    bond_ip:
+    username:
+    password:
+    disk_path:
+  - name:   #做diskful
+    ip:
+    bond_ip: 
+    username:
+    password:
+    disk_path:
