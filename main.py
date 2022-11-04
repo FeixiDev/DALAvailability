@@ -1,7 +1,6 @@
 import argparse
-import controller
 import manage
-import inconsistent_test
+import controller
 
 # python3 main.py
 # # 一键执行全部测试

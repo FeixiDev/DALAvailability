@@ -1,4 +1,4 @@
-import prettytable
+from prettytable import PrettyTable
 import subprocess
 import sys
 import paramiko
@@ -42,17 +42,11 @@ class RWData(object):
         
 
 class Table(object):
-    def __init__(self):
-        self.header = None
-        self.data = None
-        self.table = prettytable.PrettyTable()
+    def __init__(self,field_name):
+        self.table = PrettyTable(field_name)
 
-    def add_data(self, list_data):
+    def add_row(self, list_data):
         self.table.add_row(list_data)
 
-    def add_column(self, fieldname, list_column):
-        self.table.add_column(fieldname, list_column)
-
     def print_table(self):
-        self.table.field_names = self.header
         print(self.table)
