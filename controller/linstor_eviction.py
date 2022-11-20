@@ -10,7 +10,7 @@ class LinstorEviction(object):
     LINSTOR eviction test
     """
 
-    def __int__(self, name):
+    def __init__(self, name):
         self.yaml_file = config_file.ConfFile('../config.yaml')
         self.yaml_info_list = self.yaml_file.read_yaml()
         self.controller_node = exec_command.SSHconn(host=self.yaml_info_list['node'][0]['ip']
