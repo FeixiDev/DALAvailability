@@ -29,9 +29,9 @@ class SinglePrimary(object):
 
     def diskful_primary(self):
 
-        self.drbd_cmd.drbdadm_priamry(self.controller_node)
+        self.drbd_cmd.drbdadm_priamry('resourcetest01', self.controller_node)
 
-        node01_result = self.drbd_cmd.drbdadm_priamry(self.satellite_node01)
+        node01_result = self.drbd_cmd.drbdadm_priamry('resourcetest01', self.satellite_node01)
         nodeo1_command = re.findall('Command\s*(.*)', node01_result)
         if nodeo1_command:
             print(nodeo1_command)

@@ -8,7 +8,7 @@ class LinstorCommandResponse(object):
      LINSTOR响应测试
     """
 
-    def __int__(self):
+    def __init__(self):
         self.yaml_file = config_file.ConfFile('../config.yaml')
         self.yaml_info_list = self.yaml_file.read_yaml()
         self.controller_node = exec_command.SSHconn(host=self.yaml_info_list['node'][0]['ip']
@@ -23,9 +23,9 @@ class LinstorCommandResponse(object):
 
     def response_test(self):
         cmd = f'time linstor n l'
-        node_result = exec_command.SSHconn().exec_cmd(cmd,self.controller_node)
-        node01_result = exec_command.SSHconn().exec_cmd(cmd, self.satellite_node01)
-        node02_result = exec_command.SSHconn().exec_cmd(cmd, self.satellite_node02)
+        node_result = utils.exec_cmd(cmd,self.controller_node)
+        node01_result = utils.exec_cmd(cmd, self.satellite_node01)
+        node02_result = utils.exec_cmd(cmd, self.satellite_node02)
 
         real = str(re.findall('real(.*?)user', node_result)).strip()
         user = str(re.findall('user(.*?)sys', node_result)).strip()
@@ -45,5 +45,5 @@ class LinstorCommandResponse(object):
         utils.Table().add_row(['node02', real02, user02, sys02])
         utils.Table().print_table()
 
-    def main(self):
-        LinstorCommandResponse().response_test()
+def main():
+    LinstorCommandResponse().response_test()

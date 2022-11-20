@@ -11,3 +11,8 @@ class DeviceService(object):
         cmd = f'nmcli device connect {dev}'
         result = utils.exec_cmd(cmd,ssh_conn)
         return result
+
+    def disconn_device(self,dev, ssh_conn=None):
+        cmd = f'nmcli dev disconnect {dev}'
+        result = utils.exec_cmd(cmd, ssh_conn)
+        return result
