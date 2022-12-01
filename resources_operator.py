@@ -52,14 +52,14 @@ class DRBD(object):
         return result
 
     # 资源提升为priamry状态
-    def drbdadm_priamry(self, ssh_conn=None):
-        cmd = f'drbdadm primary fres'
+    def drbdadm_priamry(self, r_name, ssh_conn=None):
+        cmd = f'drbdadm primary {r_name}'
         result = utils.exec_cmd(cmd, ssh_conn)
         return result
 
     # 恢复为secondary状态
-    def drbdadm_secondary(self, ssh_conn=None):
-        cmd = f'drbdadm secondary fres'
+    def drbdadm_secondary(self, r_name, ssh_conn=None):
+        cmd = f'drbdadm secondary {r_name}'
         result = utils.exec_cmd(cmd, ssh_conn)
         return result
 
@@ -414,7 +414,7 @@ class DISK(object):
 
     # 挂载disk
     def mount_disk(self, drbd_route, ssh_conn=None):
-        cmd = f'mount {drbd_route}/mnt'
+        cmd = f'mount {drbd_route} /mnt'
         result = utils.exec_cmd(cmd, ssh_conn)
         return result
 

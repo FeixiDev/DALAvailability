@@ -1,12 +1,14 @@
 import exec_command
 import config_file
+import resources_operator
+import re
 import utils
 
 class DiscardSupport(object):
     """
       LTrim/Discard support (diskless + diskful)
      """
-    def __int__(self):
+    def __init__(self):
         self.yaml_file = config_file.ConfFile('../config.yaml')
         self.yaml_info_list = self.yaml_file.read_yaml()
         self.controller_node = exec_command.SSHconn(host=self.yaml_info_list['node'][0]['ip']
@@ -18,10 +20,13 @@ class DiscardSupport(object):
         self.satellite_node02 = exec_command.SSHconn(host=self.yaml_info_list['node'][2]['ip']
                                                      , username=self.yaml_info_list['node'][2]['username']
                                                      , password=self.yaml_info_list['node'][2]['password'])
+        check_cmd = resources_operator.Linstor().check_resource_detailed('resourcetest01', self.controller_node)
+        result = re.findall(f'\|([\w\s\/]+)', check_cmd)
+        self.device_name = result[5].strip().replace('/dev/','')
 
 
-    def discard_support(self, drbd_route):
-        cat_cmd = f'cat /sys/block/{drbd_route}/queue/discard_max_bytes'
+    def discard_support(self):
+        cat_cmd = f'cat /sys/block/{self.device_name}/queue/discard_max_bytes'
         node_resutl = utils.exec_cmd(cat_cmd, self.controller_node)
         node01_resutl = utils.exec_cmd(cat_cmd, self.satellite_node01)
         node02_resutl = utils.exec_cmd(cat_cmd, self.satellite_node02)
@@ -33,5 +38,5 @@ class DiscardSupport(object):
 
         else:
             print('Test,failed')
-    def main(self):
-        DiscardSupport().discard_support()
+def main():
+    DiscardSupport().discard_support()

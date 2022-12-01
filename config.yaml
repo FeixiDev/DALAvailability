@@ -5,15 +5,18 @@ node:
     username:
     password:
     disk_path:
+    network_card: ens192
   - name:   #做diskful
     ip:
     bond_ip:
     username:
     password:
     disk_path:
+    network_card: ens192
   - name:   #做diskful
     ip:
     bond_ip: 
     username:
     password:
     disk_path:
+    network_card: ens192
