@@ -33,7 +33,6 @@ def exec_cmd(cmd, conn=None):
     Log().logger.info(log_data)
     if result['st']:
         pass
-        # f_result = result['rt'].rstrip('\n')
     if result['st'] is False:
         sys.exit()
     return result['rt']

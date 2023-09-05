@@ -1,22 +1,27 @@
+resource_definition: test01
+resource_size: 1G
 node:
-  - name:   #做diskless
-    ip:
+  - name: master2204
+    ip: 192.168.16.128
     bond_ip:
-    username:
-    password:
-    disk_path:
-    network_card: ens192
-  - name:   #做diskful
-    ip:
+    username: root
+    password: password
+    disk_path: /dev/sdb
+    network_card:
+    vgname:
+  - name: node12204
+    ip: 192.168.16.130
     bond_ip:
-    username:
-    password:
-    disk_path:
-    network_card: ens192
-  - name:   #做diskful
-    ip:
+    username: root
+    password: password
+    disk_path: /dev/sdb
+    network_card:
+    vgname:
+  - name: node22204
+    ip: 192.168.16.129
     bond_ip: 
-    username:
-    password:
-    disk_path:
-    network_card: ens192
+    username: root
+    password: password
+    disk_path: /dev/sdb
+    network_card:
+    vgname:
