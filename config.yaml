@@ -1,27 +1,45 @@
-resource_definition: test01
-resource_size: 1G
+resource_definition: 
+controller_ip: 
+thick_lvm_storagepool_name : 
+thin_lvm_storagepool_name : 
 node:
-  - name: master2204
-    ip: 192.168.16.128
-    bond_ip:
-    username: root
-    password: password
-    disk_path: /dev/sdb
+  - name: 
+    ip: 
+    drbd_ip: 
+    username: 
+    password: 
+    disk_path: 
+    partition_path: 
     network_card:
-    vgname:
-  - name: node12204
-    ip: 192.168.16.130
-    bond_ip:
-    username: root
-    password: password
-    disk_path: /dev/sdb
+    vgname: vgtest
+    thinpool_vgname: 
+    bmc:
+      ip:
+      username:
+      password:
+  - name: 
+    ip: 
+    drbd_ip: 
+    username: 
+    password: 
+    disk_path: 
     network_card:
-    vgname:
-  - name: node22204
-    ip: 192.168.16.129
-    bond_ip: 
-    username: root
-    password: password
-    disk_path: /dev/sdb
+    vgname: 
+    thinpool_vgname: 
+    bmc:
+      ip:
+      username:
+      password:
+  - name: 
+    ip: 
+    drbd_ip: 
+    username: 
+    password: 
+    disk_path: 
     network_card:
-    vgname:
+    vgname: 
+    thinpool_vgname: 
+    bmc:
+      ip:
+      username:
+      password:

@@ -1,10 +1,19 @@
-import yaml
-
-class YamlRead:
-    def __init__(self):
-        self.yaml_info = self.yaml_read()
-
-    def yaml_read(self):
-        with open('../config.yaml') as f:
-            config = yaml.safe_load(f)
-        return config
+from . import base
+from . import drbd_disk
+from . import drbd_partition
+from . import drbd_status
+from . import linstor_node_create
+from . import linstor_node_delete
+from . import linstor_sp_lvm_create
+from . import linstor_sp_lvm_delete
+from . import linstor_sp_thinlvm_create
+from . import linstor_sp_thinlvm_delete
+from . import linstor_sp_thinlvm_increase
+from . import linstor_r_create
+from . import linstor_r_delete
+from . import linstor_r_increase
+from . import linstor_r_decrease
+from . import linstor_r_promotion
+from . import linstor_responsetime
+from . import trim
+from . import linstor_report_error

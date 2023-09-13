@@ -4,7 +4,8 @@ import time
 
 
 class SSHconn(object):
-    def __init__(self, host, port=22, username="root", password=None, timeout=8):
+    def __init__(self, host, name, port=22, username="root", password=None, timeout=8):
+        self._name = name
         self._host = host
         self._port = port
         self._username = username
@@ -36,19 +37,16 @@ class SSHconn(object):
             print(f" Failed to connect {self._host}")
 
     def exec_cmd(self, command):
-        """
-        命令执行
-        """
         if self.sshconnection:
             stdin, stdout, stderr = self.sshconnection.exec_command(command)
             result = stdout.read()
-            result = result.decode() if isinstance(result, bytes) else result
-            if result is not None:
-                return {"st": True, "rt": result}
-
             err = stderr.read()
-            if err is not None:
+            result = result.decode() if isinstance(result, bytes) else result
+            err = err.decode() if isinstance(err, bytes) else err
+            if err is not None and err != "":
                 return {"st": False, "rt": err}
+            else:
+                return {"st": True, "rt": result}
 
     def invoke_send_command(self, command):
         self.channel.send(f'{command}\n')

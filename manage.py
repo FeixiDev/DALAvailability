@@ -2,9 +2,8 @@ import yaml
 import utils
 import time
 import re
-import resources_operator
-import config_file
-import exec_command
+from utils import exec_command, resources_operator
+
 
 class YamlRead:
     def __init__(self):
@@ -24,14 +23,14 @@ class MainOperation:
         self.drbd_cmds = resources_operator.DRBD()
         self.lvm_cmds = resources_operator.LVM()
         self.obj_controller = exec_command.SSHconn(host=self.yaml_info_list['node'][0]['ip']
-                                       ,username=self.yaml_info_list['node'][0]['username']
-                                       ,password=self.yaml_info_list['node'][0]['password'])
+                                                   , username=self.yaml_info_list['node'][0]['username']
+                                                   , password=self.yaml_info_list['node'][0]['password'])
         self.obj_satellite01 = exec_command.SSHconn(host=self.yaml_info_list['node'][1]['ip']
-                                       ,username=self.yaml_info_list['node'][1]['username']
-                                       ,password=self.yaml_info_list['node'][1]['password'])
+                                                    , username=self.yaml_info_list['node'][1]['username']
+                                                    , password=self.yaml_info_list['node'][1]['password'])
         self.obj_satellite02 = exec_command.SSHconn(host=self.yaml_info_list['node'][2]['ip']
-                                       ,username=self.yaml_info_list['node'][2]['username']
-                                       ,password=self.yaml_info_list['node'][2]['password'])
+                                                    , username=self.yaml_info_list['node'][2]['username']
+                                                    , password=self.yaml_info_list['node'][2]['password'])
 
 
     def configuring_controller(self):

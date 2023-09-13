@@ -1,6 +1,5 @@
 import argparse
-import manage
-import controller
+from controller import basic,core
 
 # ----以下是一级和二级命令行----
 # python3 main.py
@@ -37,7 +36,7 @@ import controller
 # python3 main.py basic(b) linstor(l) storagepool(sp) thinlvm(tl) increase(i)
 # # linstor thin lvm存储池扩容
 # python3 main.py basic(b) linstor(l) storagepool(sp) thinlvm(tl) decrease(d)
-# # linstor thin lvm存储池缩减
+# # linstor thin lvm存储池缩减,没有此功能
 # python3 main.py basic(b) linstor(l) resource(r) create(c)
 # # linstor资源创建
 # python3 main.py basic(b) linstor(l) resource(r) delete(d)
@@ -171,13 +170,13 @@ class argparse_operator:
         print("python3 main.py basic drbd")
 
     def basic_drbd_disk_operation(self,args):
-        print("python3 main.py basic drbd disk")
+        basic.drbd_disk.main()
 
     def basic_drbd_partition_operation(self,args):
-        print("python3 main.py basic drbd partition")
+        basic.drbd_partition.main()
 
     def basic_drbd_status_operation(self,args):
-        print("python3 main.py basic drbd status")
+        basic.drbd_status.main()
 
     def basic_linstor_operation(self,args):
         print("python3 main.py basic linstor")
@@ -186,10 +185,10 @@ class argparse_operator:
         print("python3 main.py basic linstor node")
 
     def basic_linstor_node_create_operation(self,args):
-        print("python3 main.py basic linstor node create")
+        basic.linstor_node_create.main()
 
     def basic_linstor_node_delete_operation(self,args):
-        print("python3 main.py basic linstor delete")
+        basic.linstor_node_delete.main()
 
     def basic_linstor_storagepool_operation(self,args):
         print("python3 main.py basic linstor storagepool")
@@ -198,22 +197,22 @@ class argparse_operator:
         print("python3 main.py basic linstor storagepool lvm")
 
     def basic_linstor_storagepool_lvm_create_operation(self,args):
-        print("python3 main.py basic linstor storagepool lvm create")
+        basic.linstor_sp_lvm_create.main()
 
     def basic_linstor_storagepool_lvm_delete_operation(self,args):
-        print("python3 main.py basic linstor storagepool lvm delete")
+        basic.linstor_sp_lvm_delete.main()
 
     def basic_linstor_storagepool_thinlvm_operation(self,args):
         print("python3 main.py basic linstor storagepool thinlvm")
 
     def basic_linstor_storagepool_thinlvm_create_operation(self,args):
-        print("python3 main.py basic linstor storagepool thinlvm create")
+        basic.linstor_sp_thinlvm_create.main()
 
     def basic_linstor_storagepool_thinlvm_delete_operation(self,args):
-        print("python3 main.py basic linstor storagepool thinlvm delete")
+        basic.linstor_sp_thinlvm_delete.main()
 
     def basic_linstor_storagepool_thinlvm_increase_operation(self,args):
-        print("python3 main.py basic linstor storagepool thinlvm increase")
+        basic.linstor_sp_thinlvm_increase.main()
 
     def basic_linstor_storagepool_thinlvm_decrease_operation(self,args):
         print("python3 main.py basic linstor storagepool thinlvm decrease")
@@ -222,37 +221,37 @@ class argparse_operator:
         print("python3 main.py basic linstor resource")
 
     def basic_linstor_resource_create_operation(self,args):
-        print("python3 main.py basic linstor resource create")
+        basic.linstor_r_create.main()
 
     def basic_linstor_resource_delete_operation(self,args):
-        print("python3 main.py basic linstor resource delete")
+        basic.linstor_r_delete.main()
 
     def basic_linstor_resource_promotion_operation(self,args):
-        print("python3 main.py basic linstor resource promotion")
+        basic.linstor_r_promotion.main()
 
     def basic_linstor_resource_eviction_operation(self,args):
         print("python3 main.py basic linstor resource eviction")
 
     def basic_linstor_resource_increase_operation(self,args):
-        print("python3 main.py basic linstor resource increase")
+        basic.linstor_r_increase.main()
 
     def basic_linstor_resource_decrease_operation(self,args):
-        print("python3 main.py basic linstor resource decrease")
+        basic.linstor_r_decrease.main()
 
     def basic_linstor_report_operation(self,args):
         print("python3 main.py basic linstor report")
 
     def basic_linstor_report_error_operation(self,args):
-        print("python3 main.py basic linstor report error")
+        basic.linstor_report_error.main()
 
     def basic_linstor_report_sos_operation(self,args):
         print("python3 main.py basic linstor report sos")
 
     def basic_linstor_responsetime_operation(self,args):
-        print("python3 main.py basic linstor responsetime")
+        basic.linstor_responsetime.main()
 
     def basic_trim(self,args):
-        print("python3 main.py basic trim")
+        basic.trim.main()
 
 
     def parser_init(self):
