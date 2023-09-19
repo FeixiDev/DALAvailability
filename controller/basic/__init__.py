@@ -19,3 +19,4 @@ from . import linstor_responsetime
 from . import trim
 from . import linstor_report_error
 from . import linstor_report_sos
+from . import basic_test

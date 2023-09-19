@@ -161,7 +161,7 @@ class argparse_operator:
             self.perform_all_tests(args)
 
     def basic_operation(self,args):
-        print("python3 main.py basic")
+        basic.basic_test.main()
 
     def core_operation(self,args):
         print("python3 main.py core")
