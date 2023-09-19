@@ -14,6 +14,8 @@ from . import linstor_r_delete
 from . import linstor_r_increase
 from . import linstor_r_decrease
 from . import linstor_r_promotion
+from . import linstor_r_eviction
 from . import linstor_responsetime
 from . import trim
 from . import linstor_report_error
+from . import linstor_report_sos

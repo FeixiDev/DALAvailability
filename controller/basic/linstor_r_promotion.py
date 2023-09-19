@@ -28,7 +28,7 @@ class MainOperation(BaseClass):
         result2 = re.findall(r'(role:Secondary)', drbdadm_status)
 
         if len(result1) == 1 and len(result2) == 2:
-            print("drbdadm status 资源检查正常")
+            print(f"drbdadm status 资源检查正常:{obj_ssh._name}检查的资源状态:Primary，其他两个节点:Secondary")
         else:
             print("drbdadm status 资源检查异常")
             sys.exit()
@@ -39,7 +39,7 @@ class MainOperation(BaseClass):
         result2 = re.findall(r'(role:Secondary)', drbdadm_status)
 
         if len(result2) == 3:
-            print("drbdadm status 资源检查正常")
+            print(f"drbdadm status 资源检查正常,{obj_ssh._name}检查的资源状态:3个节点都为Secondary")
         else:
             print("drbdadm status 资源检查异常")
             sys.exit()
@@ -47,6 +47,8 @@ class MainOperation(BaseClass):
 
     def _dd_write(self, obj_ssh):
         print("......线程1:开始执行dd写数据操作")
+        log_data01 = f'{obj_ssh._host} - {f"dd if=/dev/urandom of={self.drbd_device} oflag=direct status=progress"} - {""}'
+        utils.Log().logger.info(log_data01)
         dd_write = utils.exec_cmd(f"dd if=/dev/urandom of={self.drbd_device} oflag=direct status=progress",obj_ssh)
         print("......dd写数据操作执行完毕,dd进程已被关闭")
 
@@ -82,6 +84,7 @@ class MainOperation(BaseClass):
 
     def up_diskful_automatic_promotion_mount(self):
         print("------diskful_automatic_promotion_mount测试开始------")
+        print(f"开始对资源{self.resource_name}:{self.drbd_device}进行格式化")
         result01 = self.obj_list[0].exec_cmd(f"mkfs.ext4 -F {self.drbd_device}")
         log_data01 = f'{self.obj_list[0]._host} - {f"mkfs.ext4 -F {self.drbd_device}"} - {result01}'
         utils.Log().logger.info(log_data01)
@@ -90,14 +93,17 @@ class MainOperation(BaseClass):
         else:
             print(f"mkfs.ext4状态错误:{result01}")
             sys.exit()
+        print(f"在节点{self.obj_list[0]._name}上进行mount {self.drbd_device} /mnt")
         utils.exec_cmd(f"mount {self.drbd_device} /mnt",self.obj_list[0])
         self._check_1primary_2secondary(self.obj_list[0])
+        print(f"在节点{self.obj_list[0]._name}上进行umount {self.drbd_device}")
         utils.exec_cmd(f"umount {self.drbd_device}",self.obj_list[0])
         self._check_3secondary(self.obj_list[0])
         print("------diskful_automatic_promotion_mount测试结束------")
 
     def up_diskless_automatic_promotion_mount(self):
         print("------diskless_automatic_promotion_mount测试开始------")
+        print(f"开始对资源{self.resource_name}:{self.drbd_device}进行格式化")
         result01 = self.obj_list[-1].exec_cmd(f"mkfs.ext4 -F {self.drbd_device}")
         log_data01 = f'{self.obj_list[-1]._host} - {f"mkfs.ext4 -F {self.drbd_device}"} - {result01}'
         utils.Log().logger.info(log_data01)
@@ -106,8 +112,10 @@ class MainOperation(BaseClass):
         else:
             print(f"mkfs.ext4状态错误:{result01}")
             sys.exit()
+        print(f"在节点{self.obj_list[-1]._name}上进行mount {self.drbd_device} /mnt")
         utils.exec_cmd(f"mount {self.drbd_device} /mnt",self.obj_list[-1])
         self._check_1primary_2secondary(self.obj_list[-1])
+        print(f"在节点{self.obj_list[-1]._name}上进行umount {self.drbd_device}")
         utils.exec_cmd(f"umount {self.drbd_device}",self.obj_list[-1])
         self._check_3secondary(self.obj_list[-1])
         print("------diskless_automatic_promotion_mount测试结束------")
@@ -134,6 +142,7 @@ class MainOperation(BaseClass):
 
     def down_diskful_automatic_promotion_mount(self):
         print("------diskful_automatic_promotion_mount测试开始------")
+        print(f"开始对资源{self.resource_name}:{self.drbd_device}进行格式化")
         result01 = self.obj_list[0].exec_cmd(f"mkfs.ext4 -F {self.drbd_device}")
         log_data01 = f'{self.obj_list[0]._host} - {f"mkfs.ext4 -F {self.drbd_device}"} - {result01}'
         utils.Log().logger.info(log_data01)
@@ -146,8 +155,10 @@ class MainOperation(BaseClass):
         result02 = self.obj_list[0].exec_cmd(f"mkfs.ext4 -F {self.drbd_device}")
         log_data02 = f'{self.obj_list[0]._host} - {f"mkfs.ext4 -F {self.drbd_device}"} - {result02}'
         utils.Log().logger.info(log_data02)
+        print(f"在节点{self.obj_list[0]._name}上进行mount {self.drbd_device} /mnt")
         utils.exec_cmd(f"mount {self.drbd_device} /mnt",self.obj_list[0])
         self._check_1primary_2secondary(self.obj_list[0])
+        print(f"在节点{self.obj_list[0]._name}上进行umount {self.drbd_device}")
         utils.exec_cmd(f"umount {self.drbd_device}",self.obj_list[0])
         self._check_1primary_2secondary(self.obj_list[0])
         utils.exec_cmd(f"drbdadm secondary {self.resource_name}",self.obj_list[0])
@@ -156,6 +167,7 @@ class MainOperation(BaseClass):
 
     def down_diskless_automatic_promotion_mount(self):
         print("------diskless_automatic_promotion_mount测试开始------")
+        print(f"开始对资源{self.resource_name}:{self.drbd_device}进行格式化")
         result01 = self.obj_list[-1].exec_cmd(f"mkfs.ext4 -F {self.drbd_device}")
         log_data01 = f'{self.obj_list[-1]._host} - {f"mkfs.ext4 -F {self.drbd_device}"} - {result01}'
         utils.Log().logger.info(log_data01)
@@ -168,8 +180,10 @@ class MainOperation(BaseClass):
         result02 = self.obj_list[-1].exec_cmd(f"mkfs.ext4 -F {self.drbd_device}")
         log_data02 = f'{self.obj_list[-1]._host} - {f"mkfs.ext4 -F {self.drbd_device}"} - {result02}'
         utils.Log().logger.info(log_data02)
+        print(f"在节点{self.obj_list[-1]._name}上进行mount {self.drbd_device} /mnt")
         utils.exec_cmd(f"mount {self.drbd_device} /mnt",self.obj_list[-1])
         self._check_1primary_2secondary(self.obj_list[-1])
+        print(f"在节点{self.obj_list[-1]._name}上进行umount {self.drbd_device}")
         utils.exec_cmd(f"umount {self.drbd_device}",self.obj_list[-1])
         self._check_1primary_2secondary(self.obj_list[-1])
         utils.exec_cmd(f"drbdadm secondary {self.resource_name}",self.obj_list[-1])

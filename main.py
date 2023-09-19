@@ -230,7 +230,7 @@ class argparse_operator:
         basic.linstor_r_promotion.main()
 
     def basic_linstor_resource_eviction_operation(self,args):
-        print("python3 main.py basic linstor resource eviction")
+        basic.linstor_r_eviction.main()
 
     def basic_linstor_resource_increase_operation(self,args):
         basic.linstor_r_increase.main()
@@ -245,7 +245,7 @@ class argparse_operator:
         basic.linstor_report_error.main()
 
     def basic_linstor_report_sos_operation(self,args):
-        print("python3 main.py basic linstor report sos")
+        basic.linstor_report_sos.main()
 
     def basic_linstor_responsetime_operation(self,args):
         basic.linstor_responsetime.main()

@@ -11,7 +11,7 @@ class MainOperation(BaseClass):
 
 
     def delete_r(self):
-        print(f"使用删除rd:{self.resource_name}来删除所有资源")
+        print(f"删除资源:{self.resource_name}")
         utils.exec_cmd(f"linstor rd d {self.resource_name}",self.obj_list[0])
 
 def main():

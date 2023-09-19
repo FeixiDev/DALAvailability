@@ -40,22 +40,22 @@ class MainOperation(BaseClass):
         utils.exec_cmd(f"linstor vd c {self.resource_name} {self.data_list[0][1]}",self.obj_list[0])
 
     def create_2diskful(self):
-        print("创建2diskful")
+        print(f"在节点{self.nodename_list[0]}和节点{self.nodename_list[1]}上创建2diskful")
         for i in range(2):
             utils.exec_cmd(f"linstor r c {self.nodename_list[i]} {self.resource_name} --storage-pool {self.data_list[i][0]}",self.obj_list[i])
         utils.exec_cmd(f"linstor r d {self.nodename_list[-1]} {self.resource_name}",self.obj_list[-1])
 
     def create_2diskful1diskless(self):
-        print("在2diskful的基础上创建1diskless")
+        print(f"在2diskful的基础上创建1diskless,即在节点{self.nodename_list[-1]}上创建diskless")
         utils.exec_cmd(f"linstor r c {self.nodename_list[-1]} {self.resource_name} --diskless",self.obj_list[-1])
 
     def create_3diskful(self):
-        print("在2diskful+1diskless的基础上创建3diskful")
+        print(f"在2diskful+1diskless的基础上创建3diskful,删除节点{self.nodename_list[-1]}的diskless并重新创建为diskful")
         utils.exec_cmd(f"linstor r d {self.nodename_list[-1]} {self.resource_name}",self.obj_list[-1])
         utils.exec_cmd(f"linstor r c {self.nodename_list[-1]} {self.resource_name} --storage-pool {self.data_list[2][0]}",self.obj_list[-1])
 
     def create_auto_2diskful(self):
-        print("在3diskful的基础上自动放置2diskful")
+        print("在3diskful的基础上自动放置2diskful,删除所有节点上的diskful,使用自动放置2diskful")
         for i in range(len(self.obj_list)):
                 utils.exec_cmd(f"linstor r d {self.nodename_list[i]} {self.resource_name}",self.obj_list[i])
         utils.exec_cmd(f"linstor r c {self.resource_name} --auto-place 2",self.obj_list[0])

@@ -41,11 +41,11 @@ class MainOperation(BaseClass):
             data_list.append(result.replace('\n', ''))
 
         if all(item.strip() == '0' for item in data_list):
-            print(f'physical discard operation 符合预期:diskful资源1：{data_list[0]},diskful资源2：{data_list[1]},diskless资源：{data_list[-1]}')
+            print(f'physical discard operation 符合预期:节点:{self.nodename_list[0]}的diskful资源1：{data_list[0]},节点:{self.nodename_list[1]}的diskful资源2：{data_list[1]},节点:{self.nodename_list[-1]}的diskless资源：{data_list[-1]}')
         elif (data_list[0].strip() != '0' or data_list[1].strip() != '0') and data_list[2].strip() != '0':
-            print(f'physical discard operation 符合预期:diskful资源1：{data_list[0]},diskful资源2：{data_list[1]},diskless资源：{data_list[-1]}')
+            print(f'physical discard operation 符合预期:节点:{self.nodename_list[0]}的diskful资源1：{data_list[0]},节点:{self.nodename_list[1]}的diskful资源2：{data_list[1]},节点:{self.nodename_list[-1]}的diskless资源：{data_list[-1]}')
         else:
-            print(f"physical discard operation 不符合预期:diskful资源1：{data_list[0]},diskful资源2：{data_list[1]},diskless资源：{data_list[-1]}")
+            print(f"physical discard operation 不符合预期:节点:{self.nodename_list[0]}的diskful资源1：{data_list[0]},节点:{self.nodename_list[1]}的diskful资源2：{data_list[1]},节点:{self.nodename_list[-1]}的diskless资源：{data_list[-1]}")
 
 
 def main():

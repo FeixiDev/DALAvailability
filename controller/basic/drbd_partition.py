@@ -64,10 +64,10 @@ EOF"""
 
 def main():
     Test = MainOperation()
-    print(f"------------开始测试：drbd资源创建（整盘）,测试节点:{Test.obj_list[0]._name},使用盘:{Test.yaml_info_list['node'][0]['partition_path']}------------")
+    print(f"------------开始测试：drbd资源创建（分区）,测试节点:{Test.obj_list[0]._name},使用盘:{Test.yaml_info_list['node'][0]['partition_path']}------------")
     Test.drbd_disk_create_res()
     Test.drbd_disk_create_resource()
-    print("------------测试结束：drbd资源创建（整盘）------------")
+    print("------------测试结束：drbd资源创建（分区）------------")
 
 if __name__ == "__main__":
     main()
