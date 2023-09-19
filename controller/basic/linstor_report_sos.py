@@ -1,6 +1,6 @@
 import sys
 import re
-from base import BaseClass
+from .base import BaseClass
 from utils import utils
 
 
@@ -25,8 +25,10 @@ class MainOperation(BaseClass):
 
 
 def main():
+    print("------------测试开始：LINSTOR sos-reports测试------------")
     Test = MainOperation()
     Test.sos_()
+    print("------------测试结束：LINSTOR sos-reports测试------------")
 
 
 if __name__ == "__main__":

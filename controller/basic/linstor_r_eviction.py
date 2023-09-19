@@ -1,4 +1,4 @@
-from base import BaseClass
+from .base import BaseClass
 from utils import utils
 import re
 import sys
@@ -24,14 +24,14 @@ class MainOperation(BaseClass):
     def _up_eviction(self):
         utils.exec_cmd(f"linstor controller sp DrbdOptions/AutoEvictAllowEviction true",self.obj_list[0])
 
-    def _down_bmc(self,obj_ssh, ip, username, password):
-        print(f"开始关闭节点：{obj_ssh._name}的bmc")
-        utils.exec_cmd(f"ipmitool -I lanplus -H {ip} -U {username} -P {password} power off",obj_ssh)
+    def _down_bmc(self, ip, username, password):
+        print(f"开始关闭节点：{self.obj_list[1]._name}的bmc")
+        utils.exec_cmd(f"ipmitool -I lanplus -H {ip} -U {username} -P {password} power off",self.obj_list[-1])
         flag = False
         for i in range(18):
             time.sleep(10)
-            bmc_status = utils.exec_cmd(f"ipmitool -I lanplus -H {ip} -U {username} -P {password} power status",obj_ssh)
-            if bmc_status == "Chassis Power is off":
+            bmc_status = utils.exec_cmd(f"ipmitool -I lanplus -H {ip} -U {username} -P {password} power status",self.obj_list[-1])
+            if "Chassis Power is off" in bmc_status:
                 flag = True
                 break
         if flag:
@@ -39,14 +39,14 @@ class MainOperation(BaseClass):
         else:
             print("bmc关闭失败")
 
-    def _up_bmc(self,obj_ssh, ip, username, password):
-        print(f"开始开启节点：{obj_ssh._name}的bmc")
-        utils.exec_cmd(f"ipmitool -I lanplus -H {ip} -U {username} -P {password} power on",obj_ssh)
+    def _up_bmc(self, ip, username, password):
+        print(f"开始开启节点：{self.obj_list[1]._name}的bmc")
+        utils.exec_cmd(f"ipmitool -I lanplus -H {ip} -U {username} -P {password} power on",self.obj_list[-1])
         flag = False
         for i in range(18):
             time.sleep(10)
-            bmc_status = utils.exec_cmd(f"ipmitool -I lanplus -H {ip} -U {username} -P {password} power status",obj_ssh)
-            if bmc_status == "Chassis Power is on":
+            bmc_status = utils.exec_cmd(f"ipmitool -I lanplus -H {ip} -U {username} -P {password} power status",self.obj_list[-1])
+            if "Chassis Power is on" in bmc_status:
                 flag = True
                 break
         if flag:
@@ -92,17 +92,15 @@ def main():
     print("------------测试开始：auto-eviction------------")
     Test = MainOperation()
     Test._up_eviction()
-    Test._down_bmc(obj_ssh=Test.obj_list[1]
-                   ,ip=Test.bmc_list[1]["ip"]
+    Test._down_bmc(ip=Test.bmc_list[1]["ip"]
                    ,username=Test.bmc_list[1]["username"]
                    ,password=Test.bmc_list[1]["password"])
     print("开始等待1小时")
     time.sleep(3600)
     Test.check_evictied(Test.obj_list[0],Test.nodename_list[1])
-    Test._up_bmc(obj_ssh=Test.obj_list[1]
-                   ,ip=Test.bmc_list[1]["ip"]
-                   ,username=Test.bmc_list[1]["username"]
-                   ,password=Test.bmc_list[1]["password"])
+    Test._up_bmc(ip=Test.bmc_list[1]["ip"]
+               ,username=Test.bmc_list[1]["username"]
+               ,password=Test.bmc_list[1]["password"])
     Test.restore_evitcted(Test.obj_list[1])
     print("------------测试开始：auto-eviction------------")
 
