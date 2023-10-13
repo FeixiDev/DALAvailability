@@ -46,7 +46,7 @@ class MainOperation(BaseClass):
 
 
     def _dd_write(self, obj_ssh):
-        print("......线程1:开始执行dd写数据操作")
+        print(f"......线程1:节点{obj_ssh._name}开始执行dd写数据操作")
         log_data01 = f'{obj_ssh._host} - {f"dd if=/dev/urandom of={self.drbd_device} oflag=direct status=progress"} - {""}'
         utils.Log().logger.info(log_data01)
         dd_write = utils.exec_cmd(f"dd if=/dev/urandom of={self.drbd_device} oflag=direct status=progress",obj_ssh)

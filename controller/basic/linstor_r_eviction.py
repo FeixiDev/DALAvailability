@@ -14,6 +14,13 @@ class MainOperation(BaseClass):
     def __init__(self):
         super().__init__()
         self.drbd_device = self._get_drbddevice()
+        self.new_obj = None
+
+    def _create_new_sshobj(self):
+        self.new_obj = utils.exec_command.SSHconn(host=self.yaml_info_list['node'][1]['ip']
+                                                    , name=self.yaml_info_list['node'][1]['name']
+                                                    , username=self.yaml_info_list['node'][1]['username']
+                                                    , password=self.yaml_info_list['node'][1]['password'])
 
     def _get_drbddevice(self):
         r_info = utils.exec_cmd(f"linstor r lv",self.obj_list[0])
@@ -58,7 +65,7 @@ class MainOperation(BaseClass):
     def check_evictied(self,obj_ssh, node_name):
         node_info = utils.exec_cmd(f"linstor n l",obj_ssh)
         result = re.findall(r'%s\s+\|\s+\S+\s+\|\s+\S+\s+\S+\s+\|\s+(\S+)'%node_name,node_info)
-        if result[0] == 'EVICTED':
+        if "EVICTED" in result[0]:
             print(f"关闭节点的状态为:EVICTED")
         else:
             print(f"关闭节点的状态为:{result[0]}，异常")
@@ -95,14 +102,16 @@ def main():
     Test._down_bmc(ip=Test.bmc_list[1]["ip"]
                    ,username=Test.bmc_list[1]["username"]
                    ,password=Test.bmc_list[1]["password"])
-    print("开始等待1小时")
-    time.sleep(3600)
+    print("开始等待90分钟")
+    time.sleep(5400)
     Test.check_evictied(Test.obj_list[0],Test.nodename_list[1])
     Test._up_bmc(ip=Test.bmc_list[1]["ip"]
                ,username=Test.bmc_list[1]["username"]
                ,password=Test.bmc_list[1]["password"])
-    Test.restore_evitcted(Test.obj_list[1])
-    print("------------测试开始：auto-eviction------------")
+    time.sleep(300)
+    Test._create_new_sshobj()
+    Test.restore_evitcted(Test.new_obj)
+    print("------------测试结束：auto-eviction------------")
 
 if __name__ == "__main__":
     main()
